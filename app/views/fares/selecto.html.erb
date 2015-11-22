@@ -1,0 +1,22 @@
+
+<h1>Please select your origin City</h1>
+
+
+<%= form_tag(selecto_done_path, method: :get) do %>
+  
+	<% @cities.each do |c| %>
+	
+		
+		<%= radio_button_tag(:city, c[:citycode], checked: :true) %>
+		<%= label_tag(:city_label, c[:citycode] + ' ' + c[:cityname] + ', ' + c[:countryname]) %>
+
+		<br>
+
+	<% end %>
+
+	<br>
+
+  <div><%= submit_tag 'Done' %></div>
+
+<% end %>
+

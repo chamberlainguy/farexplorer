@@ -1,0 +1,26 @@
+
+<h2>Search Fares</h2>
+
+<p id="notice"><%= @notice %></p>
+
+
+<%= form_tag searchinit_path, :method => :get do |f| %>  
+	
+	<div class="form-group">
+		<%= label_tag :origin %>
+		<%= text_field_tag :origin, nil, :required => true, :class=> "form-control", :autofocus => "autofocus"  %>
+		<%= label_tag :destination %>
+		<%= text_field_tag :destination, nil, :required => true, :class=> "form-control", :autofocus => "autofocus"  %>
+		
+		<%= label_tag :departuredate %>
+		<%= date_field_tag :departuredate, nil, :required => true, :class=> "form-control", :autofocus => "autofocus"  %>
+
+		<%= label_tag :returndate %>
+		<%= date_field_tag :returndate, nil, :required => true, :class=> "form-control", :autofocus => "autofocus"  %>
+
+
+	</div>
+	<br>
+	
+	<%= submit_tag "Search", :class => 'submit btn btn-primary' %>
+<% end %>
