@@ -1,9 +1,7 @@
 class FaresController < ApplicationController
   
-  require 'pry'	
-
+  
   def search
-
   end  
 
   def selecto

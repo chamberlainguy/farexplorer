@@ -121,7 +121,7 @@ puts 'Dont forget to load currencies manually in rails db'
 #
 # $ heroku pg:credentials DATABASE 
 # heroku rails db
-# /i currencies.sql
+# \i currencies.sql
 #
 
 
