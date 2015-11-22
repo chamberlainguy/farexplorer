@@ -100,7 +100,7 @@ class FaresController < ApplicationController
     end	
     
    	# Testing
-	  # token = SabreDevStudio::Base.get_access_token
+	  token = SabreDevStudio::Base.get_access_token
 
     h = '/v1/shop/flights?origin=' + session[:origin] + '&destination=' + session[:destination] + '&departuredate=' + session[:departuredate] + '&returndate=' + session[:returndate] + '&pointofsalecountry=' + poscountry + '&limit=50'
 
