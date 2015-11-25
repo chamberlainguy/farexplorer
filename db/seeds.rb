@@ -26,6 +26,7 @@ SabreDevStudio.configure do |c|
   		c.client_secret = '2CPxfDl2'
   		c.uri           = 'https://api.test.sabre.com'
 end
+token = SabreDevStudio::Base.get_access_token
 res = SabreDevStudio::Base.get('/v1/lists/supported/pointofsalecountries')
 count = 0
 res['Countries'].each do |c|

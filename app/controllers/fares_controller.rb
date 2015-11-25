@@ -100,15 +100,19 @@ class FaresController < ApplicationController
     end	
     
    	# Testing
-	  token = SabreDevStudio::Base.get_access_token
+   #  SabreDevStudio.configure do |c|
+   #    c.client_id     = 'V1:1iy62gr6fh6yi2e8:DEVCENTER:EXT'
+   #    c.client_secret = '2CPxfDl2'
+   #    c.uri           = 'https://api.test.sabre.com'
+   #  end
+	  # token = SabreDevStudio::Base.get_access_token
 
     h = '/v1/shop/flights?origin=' + session[:origin] + '&destination=' + session[:destination] + '&departuredate=' + session[:departuredate] + '&returndate=' + session[:returndate] + '&pointofsalecountry=' + poscountry + '&limit=50'
 
-	  results = SabreDevStudio::Base.get(h)  # Take the first Href. it works
+	  @results = SabreDevStudio::Base.get(h)  # Take the first Href. it works
 
-	  @itins = FareDataService.new.convert results
+	  @itins = FareDataService.new.convert @results
 
-  
   end
 
   def show
