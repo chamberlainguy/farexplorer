@@ -1,15 +1,19 @@
 Rails.application.routes.draw do
 
 
-  root to: "fares#search"
+   # Temp root
 
-  get '/searchinit' => 'fares#searchinit', as: :searchinit
+  # root to: 'fares2#index'
 
-  get '/fares' => 'fares#index', as: :fares
+  root to: 'fares2#search'
 
-  get '/selecto' => 'fares#selecto', as: :selecto
-  get '/selectd' => 'fares#selectd', as: :selectd
-  get '/selectod' => 'fares#selectod', as: :selecto_done
-  get '/selectdd' => 'fares#selectdd', as: :selectd_done
+  get '/searchinit' => 'fares2#searchinit', as: :searchinit
+
+  get '/fares' => 'fares2#index', as: :fares
+
+  get '/selecto' => 'fares2#selecto', as: :selecto
+  get '/selectd' => 'fares2#selectd', as: :selectd
+  get '/selectod' => 'fares2#selectod', as: :selecto_done
+  get '/selectdd' => 'fares2#selectdd', as: :selectd_done
 
 end

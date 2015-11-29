@@ -1,2 +1,24 @@
+<!-- 
+
+<% @itins.each do |itin| %>
+
+	<%= itin['TotalFare'] + ' ' + itin['TotalFareCurrencyCode'] %>
+
+	<br>	
+
+	<% itin['Legs'].each do |leg| %>
+
+		<%= image_tag('http://pics.avs.io/200/20/' + leg['AirlineCode'] + '.png') %> 
+
+		<%= leg['Name'] + ' ' + leg['DepartDate'] + ' ' + leg['DepartTime'] + ' --> ' + leg['ArriveTime'] + ' ' + leg['DayDiff'] + ' ' + leg['Stops'] + ' ' + leg['StopDuration']%>
+
+		<br>
+
+	<% end %>
+	<br>
+	
+<% end %>
+
+-->
 <h1>Fares#show</h1>
 <p>Find me in app/views/fares/show.html.erb</p>

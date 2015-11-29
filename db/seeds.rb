@@ -12,13 +12,21 @@ iatakey = '396a4c10-3aff-4de0-aa92-49d4bfe91ac2'
 puts 'Loading Countries...'
 
 Country.destroy_all
-url = "http://iatacodes.org/api/v2/countries?api_key=#{iatakey}"
-res = HTTParty.get url
-res['response'].each do |country|
-	Country.create code: country['code'],
-		           name: country['name']
-end
+# url = "http://iatacodes.org/api/v2/countries?api_key=#{iatakey}"
+# res = HTTParty.get url
+# res['response'].each do |country|
 
+# 		Country.create code: country['code'],
+# 		           	   name: country['name']
+	           
+# end
+
+	    Country.create code: 'AU',
+		           	   name: 'Australia'
+	           
+	    Country.create code: 'US',
+		           	   name: 'United States'
+	           
 
 # Set point of sale
 SabreDevStudio.configure do |c|
@@ -31,9 +39,11 @@ res = SabreDevStudio::Base.get('/v1/lists/supported/pointofsalecountries')
 count = 0
 res['Countries'].each do |c|
 	country = Country.find_by :code => c['CountryCode']
-	country['point_of_sale'] = true
-	country.save
-	count += 1
+	if country.present?
+		country['point_of_sale'] = true
+		country.save
+		count += 1
+	end
 end
 puts count.to_s + ' Points of sale...'
 
@@ -120,9 +130,9 @@ puts 'Dont forget to load currencies manually in rails db'
 
 # Dont forget to also load the currencies table
 #
-# $ heroku pg:credentials DATABASE 
-# heroku rails db
-# \i currencies.sql
+# $ heroku pg:credentials DATABASE    # to get the password!!
+# $ heroku run rails db
+#   \i currencies.sql
 #
 
 
