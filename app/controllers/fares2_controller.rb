@@ -69,8 +69,6 @@ def search
     session[:departuretime] = params[:departuretime]
     session[:returntime] = params[:returntime]
 
-
-
     redirect_to fares_path
 
   end
@@ -110,11 +108,11 @@ def search
         session[:destination] = session[:destination][0]
     end 
 
- # TODO add the correct time to the arribe and detart timestamps
+ # TODO add the correct time to the arrive and depart timestamps
 
 
 
-# Support first inly simply itineries
+# Support first only simply itineries
 @therequest = 
  {
     "OTA_AirLowFareSearchRQ": {
