@@ -1,7 +1,7 @@
 class Fares2Controller < ApplicationController
 
 include ActionView::Helpers::TextHelper
-require 'pry'
+# require 'pry'
 
 def search
 
