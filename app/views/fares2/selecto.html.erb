@@ -16,7 +16,15 @@
 
 	<br>
 
-  <div><%= submit_tag 'Done' %></div>
+  <div><%= submit_tag 'Done', :class => 'submit btn btn-primary' %></div>
 
 <% end %>
 
+<%= image_tag("loading.gif", id: "gif", style: "display: block; margin: 0 auto; width: 100px; visibility: hidden;") %>
+
+<script type="text/javascript">
+    $('.btn-primary').click(function() {
+    	$('#gif').css('visibility', 'visible');
+    	return true;
+	});
+ </script>

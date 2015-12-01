@@ -1,4 +1,5 @@
 
+
 <h2>Search Fares</h2>
 
 <p id="notice"><%= @notice %></p>
@@ -27,4 +28,17 @@
 	<br>
 	
 	<%= submit_tag "Search", :class => 'submit btn btn-primary' %>
+
 <% end %>
+
+<%= image_tag("loading.gif", id: "gif", style: "display: block; margin: 0 auto; width: 100px; visibility: hidden;") %>
+
+<script type="text/javascript">
+    $('.btn-primary').click(function() {
+    	$('#gif').css('visibility', 'visible');
+    	return true;
+	});
+ </script>
+
+
+
