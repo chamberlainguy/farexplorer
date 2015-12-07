@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109233300) do
+ActiveRecord::Schema.define(version: 20151207034235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,11 @@ ActiveRecord::Schema.define(version: 20151109233300) do
 
   add_index "airports", ["code"], name: "index_airports_on_code", unique: true, using: :btree
 
+  create_table "bfsessions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "cities", force: :cascade do |t|
     t.string "code"
     t.string "name"
@@ -64,6 +69,49 @@ ActiveRecord::Schema.define(version: 20151109233300) do
   end
 
   add_index "currencies", ["code"], name: "index_currencies_on_code", unique: true, using: :btree
+
+  create_table "itins", force: :cascade do |t|
+    t.text     "ticket_type"
+    t.decimal  "price"
+    t.text     "curr_code"
+    t.integer  "bfsession_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "itins_legs", force: :cascade do |t|
+    t.integer "itin_id"
+    t.integer "leg_id"
+  end
+
+  add_index "itins_legs", ["itin_id"], name: "index_itins_legs_on_itin_id", using: :btree
+  add_index "itins_legs", ["leg_id"], name: "index_itins_legs_on_leg_id", using: :btree
+
+  create_table "legs", force: :cascade do |t|
+    t.integer  "seq"
+    t.text     "search_key"
+    t.integer  "flight_mins"
+    t.integer  "bfsession_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "legs", ["search_key"], name: "index_legs_on_search_key", unique: true, using: :btree
+
+  create_table "segs", force: :cascade do |t|
+    t.datetime "depart_datetime"
+    t.datetime "arrive_datetime"
+    t.integer  "stop_quantity"
+    t.text     "flight_num"
+    t.text     "depart_airport_code"
+    t.text     "arrive_airport_code"
+    t.integer  "flight_mins"
+    t.text     "mark_airline_code"
+    t.text     "op_airline_code"
+    t.integer  "leg_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
 
   create_table "taxes", force: :cascade do |t|
     t.string "code"

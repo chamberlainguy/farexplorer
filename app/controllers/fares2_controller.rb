@@ -142,22 +142,22 @@ def search
                     "Code": "O"
                 }
             }
-        }
-        # , {
-        #     "RPH": "2",
-        #     "DepartureDateTime": session[:returndate]+"T11:00:00",
-        #     "OriginLocation": {
-        #         "LocationCode": session[:destination]
-        #     },
-        #     "DestinationLocation": {
-        #         "LocationCode": session[:origin]
-        #     },
-        #     "TPA_Extensions": {
-        #         "SegmentType": {
-        #             "Code": "O"
-        #         }
-        #     }
-        # }
+        },
+          {
+             "RPH": "2",
+             "DepartureDateTime": session[:returndate]+"T11:00:00",
+             "OriginLocation": {
+                 "LocationCode": session[:destination]
+             },
+             "DestinationLocation": {
+                 "LocationCode": session[:origin]
+             },
+             "TPA_Extensions": {
+                 "SegmentType": {
+                     "Code": "O"
+                 }
+             }
+         }
         ],
         "TravelPreferences": {
             "ValidInterlineTicket": true,
@@ -167,7 +167,7 @@ def search
             }],
             "TPA_Extensions": {
                 "TripType": {
-                    "Value": "OneWay"
+                    "Value": "Return"
                 },
                 "LongConnectTime": {
                     "Min": 780,
@@ -238,11 +238,93 @@ def search
      @itins = @itins.sort_by { |k| [ k["Legs"][0]["Segs"].count + k["Legs"][-1]["Segs"].count, k["Price"] ] }
     
      
-      
+     write_fb_session results 
     
   end
 
 private
+
+
+def write_fb_session results
+
+  bf = Bfsession.create
+
+  results['OTA_AirLowFareSearchRS']['PricedItineraries']['PricedItinerary'].each do |pi|
+
+      it = Itin.create ticket_type:
+                        pi['AirItinerary']['DirectionInd'],
+                        price:
+                        pi['AirItineraryPricingInfo'][0]['ItinTotalFare']['BaseFare']['Amount'],
+                        curr_code:
+                        pi['AirItineraryPricingInfo'][0]['ItinTotalFare']['BaseFare']['CurrencyCode']
+
+      bf.itins << it                  
+
+      leg_seq = 0
+
+      pi["AirItinerary"]["OriginDestinationOptions"]["OriginDestinationOption"].each do |aleg|
+
+        leg_seq += 1
+
+        search_key = make_search_key(aleg, leg_seq, bf.id)
+
+        le = Leg.find_by :search_key => search_key
+
+        if le.present? 
+
+          it.legs << le
+
+        else
+          # Now make this leg
+
+          le = Leg.create seq:
+                          leg_seq,
+                          search_key:
+                          search_key,
+                          flight_mins:
+                          aleg['ElapsedTime']
+          it.legs << le     
+
+          bf.legs << le           
+
+          # Now make the segments
+
+          aleg['FlightSegment'].each do |aseg| 
+
+            se = Seg.create  depart_datetime: aseg['DepartureDateTime'],
+                    arrive_datetime: aseg['ArrivalDateTime'],
+                    stop_quantity: aseg['StopQuantity'],
+                    flight_num: aseg['FlightNumber'],
+                    depart_airport_code: aseg['DepartureAirport']['LocationCode'],
+                    arrive_airport_code: aseg['ArrivalAirport']['LocationCode'],
+                    flight_mins: aseg['ElapsedTime'],
+                    mark_airline_code: aseg['MarketingAirline']['Code'],
+                    op_airline_code: aseg['OperatingAirline']['Code']
+
+            le.segs << se
+
+          end  
+
+        end  
+
+      end
+
+  end
+
+  bf.destroy
+
+end
+
+def make_search_key (aleg, leg_seq, bf_id)
+
+  key = bf_id.to_s + "#" + leg_seq.to_s 
+  aleg['FlightSegment'].each do |aseg| 
+    key += "#" + aseg['FlightNumber'] + "#" + aseg['DepartureDateTime'] 
+  end  
+
+  key
+
+end
 
 def convert results
 
@@ -327,8 +409,6 @@ def convert results
     end  
 
     itins
-
-
 
 end
 

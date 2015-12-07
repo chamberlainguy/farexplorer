@@ -1,11 +1,10 @@
 # == Schema Information
 #
-# Table name: aircrafts
+# Table name: bfsessions
 #
 #  id         :integer          not null, primary key
-#  code       :string
-#  name       :string
-#  country_id :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html

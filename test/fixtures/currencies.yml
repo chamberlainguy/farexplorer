@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: currencies
+#
+#  id       :integer          not null, primary key
+#  country  :string
+#  currency :string
+#  code     :string
+#  symbol   :string
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 # This model initially had no columns defined.  If you add columns to the

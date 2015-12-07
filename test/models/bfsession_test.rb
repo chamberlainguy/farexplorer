@@ -1,16 +1,15 @@
 # == Schema Information
 #
-# Table name: aircrafts
+# Table name: bfsessions
 #
 #  id         :integer          not null, primary key
-#  code       :string
-#  name       :string
-#  country_id :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 
 require 'test_helper'
 
-class AircraftTest < ActiveSupport::TestCase
+class BfsessionTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
