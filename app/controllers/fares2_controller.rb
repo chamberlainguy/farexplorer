@@ -76,10 +76,6 @@ def search
 
   def index
 
-
-
-
-
 # Validate origin
     session[:origin] = validate_and_convert_city_name(session[:origin])
     unless session[:origin].present?
@@ -225,7 +221,7 @@ def search
     :headers => headers ) 
 
 
-      @itins = convert results
+      # @itins = convert results
 
      
      # Sort by price only
@@ -235,17 +231,24 @@ def search
      # @itins = @itins.sort_by { |k| k["Legs"][0]["Segs"].count + k["Legs"][-1]["Segs"].count }
     
      # Sort by Segments count THEN by price
-     @itins = @itins.sort_by { |k| [ k["Legs"][0]["Segs"].count + k["Legs"][-1]["Segs"].count, k["Price"] ] }
+     # @itins = @itins.sort_by { |k| [ k["Legs"][0]["Segs"].count + k["Legs"][-1]["Segs"].count, k["Price"] ] }
     
      
-     write_fb_session results 
+     bf_id = write_fb_session results 
     
+     @legs = get_legs bf_id
+
   end
 
 private
 
 
+
+
+
 def write_fb_session results
+
+  # TODO if a bd.id is passed in then use it instead of creating
 
   bf = Bfsession.create
 
@@ -311,9 +314,44 @@ def write_fb_session results
 
   end
 
-  bf.destroy
+  # bf.destroy
+
+  return bf.id
 
 end
+
+def get_legs bf_id
+
+    bf = Bfsession.find bf_id
+
+    legs = []
+    bf.legs.each do |aleg|
+      if aleg.seq = 1
+        leg = {}
+        # Find the lowest and highest price for this leg
+        low_price = 9999999.99
+        high_price = 0
+        aleg.itins.each do |aitin|
+          if aitin.price < low_price
+            low_price = aitin.price
+          end      
+          if aitin.price > high_price
+            high_price = aitin.price
+          end
+        end
+        leg['LowPrice'] = low_price
+        leg['HighPrice'] = high_price
+        leg['Stops'] = aleg.segs.count - 1
+        legs << leg
+      end
+    end
+
+    legs = legs.sort_by { |k| [ k["Stops"], k["LowPrice"] ] }
+
+    legs
+end
+
+
 
 def make_search_key (aleg, leg_seq, bf_id)
 
